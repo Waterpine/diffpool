@@ -214,9 +214,9 @@ def train(dataset, model, args, same_feat=True, val_dataset=None, test_dataset=N
             #    print('Iter: ', iter, ', loss: ', loss.data[0])
 
             # log once per XX epochs
-            if epoch % 10 == 0 and batch_idx == len(dataset) // 2 and args.method == 'soft-assign' and writer is not None:
-                log_assignment(model.assign_tensor, writer, epoch, writer_batch_idx)
-                log_graph(adj, batch_num_nodes, writer, epoch, writer_batch_idx, model.assign_tensor)
+            # if epoch % 10 == 0 and batch_idx == len(dataset) // 2 and args.method == 'soft-assign' and writer is not None:
+            #     log_assignment(model.assign_tensor, writer, epoch, writer_batch_idx)
+            #     log_graph(adj, batch_num_nodes, writer, epoch, writer_batch_idx, model.assign_tensor)
         avg_loss /= batch_idx + 1
         elapsed = time.time() - begin_time
         if writer is not None:
@@ -280,7 +280,7 @@ def prepare_data(graphs, args, test_graphs=None, max_nodes=0):
     else:
         train_idx = int(len(graphs) * args.train_ratio)
         train_graphs = graphs[:train_idx]
-        val_graphs = graph[train_idx:]
+        val_graphs = graphs[train_idx:]
     print('Num training graphs: ', len(train_graphs), 
           '; Num validation graphs: ', len(val_graphs),
           '; Num testing graphs: ', len(test_graphs))
@@ -603,7 +603,7 @@ def arg_parse():
                         num_classes=2,
                         num_gc_layers=3,
                         dropout=0.0,
-                        method='base',
+                        method='soft-assign',
                         name_suffix='',
                         assign_ratio=0.1,
                         num_pool=1
